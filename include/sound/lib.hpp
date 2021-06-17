@@ -3,20 +3,22 @@
 
 #include <sys/types.h>
 
+#include <map>
 #include <mutex>
+#include <string>
 #include <thread>
 
 class SoundSwitcher {
    public:
-    SoundSwitcher();
     void Start();
     void Stop();
+    void Insert(const std::string &path);
+    size_t Size() const;
 
    private:
     // Need to be not public
     pid_t pid_ = -1;
-    bool is_running_ = false;
-    std::thread th_;
+    std::map<int, std::string> map_;
 };
 
 #endif

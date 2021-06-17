@@ -22,3 +22,14 @@ find_package(Boost REQUIRED)
 
 # The compiled library code is here
 add_subdirectory(src)
+
+# Only do following if this is the main project
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+    # Ensure -std=c++xx instead of -std=g++xx
+    set(CMAKE_CXX_EXTENSIONS OFF)
+
+    # The Executable code
+    add_subdirectory(app)
+
+endif()

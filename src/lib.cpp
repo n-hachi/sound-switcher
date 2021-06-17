@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <vector>
 
 void SoundSwitcher::Stop() {
     // If pid_ is less equal than 0, there is no child process.
@@ -28,14 +29,26 @@ void SoundSwitcher::Start() {
         return;
     }
     if (pid_ == 0) {
-        char *const args[] = {
-            "/usr/bin/aplay",
-            "/home/n_hachi/src/github.com/n-hachi/sound-switcher/sounds/"
-            "mixkit-retro-game-emergency-alarm-1000.wav",
-            ""};
-        execvp(args[0], args);
+        if (Size() <= 0) {
+            return;
+        }
+
+        const char **argv = new const char *[3];
+        argv[0] = "/usr/bin/aplay";
+        argv[1] = map_.at(0).c_str();
+        argv[2] = NULL;
+
+        const char *cmd = argv[0];
+        execvp(cmd, (char **)argv);
     }
     if (pid_ > 0) {
         waitpid(pid_, NULL, 0);
     }
 }
+
+void SoundSwitcher::Insert(const std::string &path) {
+    int size = (int)map_.size();
+    map_.insert(std::pair<int, std::string>(size, path));
+}
+
+size_t SoundSwitcher::Size() const { return map_.size(); }
