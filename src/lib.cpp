@@ -1,6 +1,8 @@
 #include "sound/lib.hpp"
 
+#include <fcntl.h>
 #include <signal.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -54,6 +56,9 @@ void SoundSwitcher::Start() {
         if (Size() <= 0) {
             return;
         }
+        int fd = open("/dev/null", O_WRONLY | O_CREAT, 0666);
+        dup2(fd, 1);
+        dup2(fd, 2);
 
         const char **argv = new const char *[3];
         argv[0] = "/usr/bin/aplay";
