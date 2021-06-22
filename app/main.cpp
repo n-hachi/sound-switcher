@@ -1,5 +1,6 @@
 #include <getopt.h>
 
+#include <algorithm>
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
@@ -12,6 +13,12 @@
 #include "version.h"
 
 std::string appname;
+
+bool IsDigit(const std::string& s) {
+    return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) {
+                             return !std::isdigit(c);
+                         }) == s.end();
+}
 
 void Usage(void) {
     std::cout << "Usage: " << appname << " [OPTION] files" << std::endl;
@@ -72,6 +79,10 @@ int main(int argc, char* argv[]) {
             if (tokens.size() < 2) {
                 std::cout << "input 'start <number>' , 'stop' or 'quit'"
                           << std::endl;
+                continue;
+            }
+            if (!IsDigit(tokens[1])) {
+                std::cout << "input 'start <number>'" << std::endl;
                 continue;
             }
             int num = std::stoi(tokens[1]);
