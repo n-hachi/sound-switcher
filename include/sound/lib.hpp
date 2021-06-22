@@ -19,7 +19,11 @@ class SoundSwitcher {
     // Need to be not public
     pid_t pid_ = -1;
     std::map<int, std::string> map_;
+
+    // Thread related method and variables to wait for child process.
     void ThreadFunc();
+    std::thread th_;
+    bool is_running_ = false;
 };
 
 #endif

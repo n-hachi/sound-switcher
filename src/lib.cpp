@@ -17,10 +17,24 @@ void SoundSwitcher::Stop() {
 
     // If pid is more than 0, stop child process.
     kill(pid_, SIGTERM);
-    waitpid(pid_, NULL, 0);
+
+    // If thread is joinable
+    if (is_running_ && th_.joinable()) {
+        th_.join();
+    }
+
+    // Set false value to is_running
+    is_running_ = false;
 }
 
 void SoundSwitcher::ThreadFunc() {
+    // Setup flag
+    is_running_ = true;
+
+    // Just for Debug
+    // std::cout << "Path this point, pid_ = " << pid_ << std::endl;
+    std::cout << "Path this point" << std::endl;
+
     waitpid(pid_, NULL, 0);
 
     // Print
@@ -52,7 +66,7 @@ void SoundSwitcher::Start() {
     if (pid_ > 0) {
         // Wait for child process exit.
         std::thread th(&SoundSwitcher::ThreadFunc, this);
-        th.join();
+        th_ = std::move(th);
     }
 }
 
