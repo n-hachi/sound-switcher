@@ -73,8 +73,10 @@ int main(int argc, char* argv[]) {
             int num = std::stoi(tokens[1]);
             // Just for debug
             std::cout << "command = 'start' , val = " << num << std::endl;
+            switcher.Start();
         } else if (tokens[0] == "stop") {
             std::cout << "command = 'stop'" << std::endl;
+            switcher.Stop();
         } else if (tokens[0] == "quit") {
             break;
         } else {
@@ -83,8 +85,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    switcher.Start();
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     switcher.Stop();
 
     return 0;
