@@ -64,6 +64,10 @@ int main(int argc, char* argv[]) {
             tokens.push_back(token);
         }
 
+        if (tokens.size() == 0) {
+            continue;
+        }
+
         if (tokens[0] == "start") {
             if (tokens.size() < 2) {
                 std::cout << "input 'start <number>' , 'stop' or 'quit'"
