@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <iostream>
+#include <thread>
 #include <vector>
 
 void SoundSwitcher::Stop() {
@@ -17,6 +18,13 @@ void SoundSwitcher::Stop() {
     // If pid is more than 0, stop child process.
     kill(pid_, SIGTERM);
     waitpid(pid_, NULL, 0);
+}
+
+void SoundSwitcher::ThreadFunc() {
+    waitpid(pid_, NULL, 0);
+
+    // Print
+    std::cout << "Child process exited." << std::endl;
 }
 
 void SoundSwitcher::Start() {
@@ -42,7 +50,8 @@ void SoundSwitcher::Start() {
         execvp(cmd, (char **)argv);
     }
     if (pid_ > 0) {
-        waitpid(pid_, NULL, 0);
+        // Wait for child process exit.
+        std::thread th(&SoundSwitcher::ThreadFunc, this);
     }
 }
 

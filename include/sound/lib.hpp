@@ -19,6 +19,7 @@ class SoundSwitcher {
     // Need to be not public
     pid_t pid_ = -1;
     std::map<int, std::string> map_;
+    void ThreadFunc();
 };
 
 #endif
