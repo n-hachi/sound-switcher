@@ -1,18 +1,18 @@
 #include <getopt.h>
 
+#include <chrono>
 #include <cstdlib>
 #include <iostream>
-#include <sound/lib.hpp>
 #include <string>
+#include <thread>
 
 #include "sound/lib.hpp"
 #include "version.h"
 
 std::string appname;
-std::string filename;
 
 void Usage(void) {
-    std::cout << "Usage: " << appname << " [OPTION] file" << std::endl;
+    std::cout << "Usage: " << appname << " [OPTION] files" << std::endl;
 }
 void Version(void) {
     std::cout << appname << " " << PROJECT_VERSION << std::endl
@@ -41,12 +41,21 @@ int main(int argc, char* argv[]) {
         Usage();
         std::exit(EXIT_FAILURE);
     }
-    filename = argv[optind];
 
-    // Debug
+    // Store files to switcher
     SoundSwitcher switcher;
-    switcher.Insert(filename);
+    for (int i = optind; i < argc; ++i) {
+        std::string filename = argv[i];
+
+        // Debug
+        std::cout << "file : " << filename << std::endl;
+
+        switcher.Insert(filename);
+    }
+
     switcher.Start();
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    switcher.Stop();
 
     return 0;
 }
