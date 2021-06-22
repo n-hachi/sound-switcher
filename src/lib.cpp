@@ -33,14 +33,7 @@ void SoundSwitcher::ThreadFunc() {
     // Setup flag
     is_running_ = true;
 
-    // Just for Debug
-    // std::cout << "Path this point, pid_ = " << pid_ << std::endl;
-    std::cout << "Path this point" << std::endl;
-
     waitpid(pid_, NULL, 0);
-
-    // Print
-    std::cout << "Child process exited." << std::endl;
 }
 
 void SoundSwitcher::Start() {
