@@ -52,6 +52,7 @@ void SoundSwitcher::Start() {
     if (pid_ > 0) {
         // Wait for child process exit.
         std::thread th(&SoundSwitcher::ThreadFunc, this);
+        th.join();
     }
 }
 
