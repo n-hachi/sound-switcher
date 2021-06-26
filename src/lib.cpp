@@ -74,3 +74,5 @@ void SoundSwitcher::Insert(const std::string &path) {
 }
 
 size_t SoundSwitcher::Size() const { return map_.size(); }
+
+std::map<int, std::string> SoundSwitcher::map() { return map_; }

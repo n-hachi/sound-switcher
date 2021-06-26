@@ -77,8 +77,9 @@ int main(int argc, char* argv[]) {
 
         if (tokens[0] == "start") {
             if (tokens.size() < 2) {
-                std::cout << "input 'start <number>' , 'stop' or 'quit'"
-                          << std::endl;
+                std::cout
+                    << "input 'start <number>' , 'list' , 'stop' or 'quit'"
+                    << std::endl;
                 continue;
             }
             if (!IsDigit(tokens[1])) {
@@ -100,8 +101,13 @@ int main(int argc, char* argv[]) {
             switcher.Stop();
         } else if (tokens[0] == "quit") {
             break;
+        } else if (tokens[0] == "list") {
+            auto m = switcher.map();
+            for (auto it = m.begin(); it != m.end(); ++it) {
+                std::cout << it->first << " : " << it->second << std::endl;
+            }
         } else {
-            std::cout << "input 'start <number>' , 'stop' or 'quit'"
+            std::cout << "input 'start <number>' , 'list' , 'stop' or 'quit'"
                       << std::endl;
         }
     }
