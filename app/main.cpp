@@ -13,6 +13,7 @@
 #include "version.h"
 
 std::string appname;
+SoundSwitcher switcher;
 
 bool IsDigit(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) {
@@ -26,6 +27,62 @@ void Usage(void) {
 void Version(void) {
     std::cout << appname << " " << PROJECT_VERSION << std::endl
               << "commit : " << COMMIT_HASH << std::endl;
+}
+
+void Loop(void) {
+    while (true) {
+        // Print prompt
+        std::cout << "> ";
+        std::string line;
+        std::getline(std::cin, line);
+
+        std::istringstream ss(line);
+        std::string token;
+        std::vector<std::string> tokens;
+        while (ss >> token) {
+            tokens.push_back(token);
+        }
+
+        if (tokens.size() == 0) {
+            continue;
+        }
+
+        if (tokens[0] == "start") {
+            if (tokens.size() < 2) {
+                std::cout
+                    << "input 'start <number>' , 'list' , 'stop' or 'quit'"
+                    << std::endl;
+                continue;
+            }
+            if (!IsDigit(tokens[1])) {
+                std::cout << "input 'start <number>'" << std::endl;
+                continue;
+            }
+            int num = std::stoi(tokens[1]);
+            if (num < 0 || switcher.Size() <= num) {
+                std::cout << "'start' command must take a number between 0 and "
+                          << (num - 1) << " as an argument." << std::endl;
+                continue;
+            }
+
+            // Just for debug
+            std::cout << "command = 'start' , val = " << num << std::endl;
+            switcher.Start(num);
+        } else if (tokens[0] == "stop") {
+            std::cout << "command = 'stop'" << std::endl;
+            switcher.Stop();
+        } else if (tokens[0] == "quit") {
+            break;
+        } else if (tokens[0] == "list") {
+            auto m = switcher.map();
+            for (auto it = m.begin(); it != m.end(); ++it) {
+                std::cout << it->first << " : " << it->second << std::endl;
+            }
+        } else {
+            std::cout << "input 'start <number>' , 'list' , 'stop' or 'quit'"
+                      << std::endl;
+        }
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -52,54 +109,15 @@ int main(int argc, char* argv[]) {
     }
 
     // Store files to switcher
-    SoundSwitcher switcher;
     for (int i = optind; i < argc; ++i) {
         std::string filename = argv[i];
         switcher.Insert(filename);
     }
 
-    while (true) {
-        // Print prompt
-        std::cout << "> ";
-        std::string line;
-        std::getline(std::cin, line);
+    // Main processing.
+    Loop();
 
-        std::istringstream ss(line);
-        std::string token;
-        std::vector<std::string> tokens;
-        while (ss >> token) {
-            tokens.push_back(token);
-        }
-
-        if (tokens.size() == 0) {
-            continue;
-        }
-
-        if (tokens[0] == "start") {
-            if (tokens.size() < 2) {
-                std::cout << "input 'start <number>' , 'stop' or 'quit'"
-                          << std::endl;
-                continue;
-            }
-            if (!IsDigit(tokens[1])) {
-                std::cout << "input 'start <number>'" << std::endl;
-                continue;
-            }
-            int num = std::stoi(tokens[1]);
-            // Just for debug
-            std::cout << "command = 'start' , val = " << num << std::endl;
-            switcher.Start();
-        } else if (tokens[0] == "stop") {
-            std::cout << "command = 'stop'" << std::endl;
-            switcher.Stop();
-        } else if (tokens[0] == "quit") {
-            break;
-        } else {
-            std::cout << "input 'start <number>' , 'stop' or 'quit'"
-                      << std::endl;
-        }
-    }
-
+    // Post processing.
     switcher.Stop();
 
     return 0;
