@@ -86,6 +86,12 @@ int main(int argc, char* argv[]) {
                 continue;
             }
             int num = std::stoi(tokens[1]);
+            if (num < 0 || switcher.Size() <= num) {
+                std::cout << "'start' command must take a number between 0 and "
+                          << (num - 1) << " as an argument." << std::endl;
+                continue;
+            }
+
             // Just for debug
             std::cout << "command = 'start' , val = " << num << std::endl;
             switcher.Start(num);
