@@ -13,6 +13,7 @@
 #include "version.h"
 
 std::string appname;
+SoundSwitcher switcher;
 
 bool IsDigit(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), s.end(), [](unsigned char c) {
@@ -28,36 +29,7 @@ void Version(void) {
               << "commit : " << COMMIT_HASH << std::endl;
 }
 
-int main(int argc, char* argv[]) {
-    appname = argv[0];
-
-    int opt;
-    while ((opt = getopt(argc, argv, "hv")) != -1) {
-        switch (opt) {
-            case 'h':
-                Usage();
-                std::exit(EXIT_SUCCESS);
-            case 'v':
-                Version();
-                std::exit(EXIT_SUCCESS);
-            default: /* '?' */
-                Usage();
-                std::exit(EXIT_FAILURE);
-        }
-    }
-
-    if (optind >= argc) {
-        Usage();
-        std::exit(EXIT_FAILURE);
-    }
-
-    // Store files to switcher
-    SoundSwitcher switcher;
-    for (int i = optind; i < argc; ++i) {
-        std::string filename = argv[i];
-        switcher.Insert(filename);
-    }
-
+void Loop(void) {
     while (true) {
         // Print prompt
         std::cout << "> ";
@@ -111,7 +83,41 @@ int main(int argc, char* argv[]) {
                       << std::endl;
         }
     }
+}
 
+int main(int argc, char* argv[]) {
+    appname = argv[0];
+
+    int opt;
+    while ((opt = getopt(argc, argv, "hv")) != -1) {
+        switch (opt) {
+            case 'h':
+                Usage();
+                std::exit(EXIT_SUCCESS);
+            case 'v':
+                Version();
+                std::exit(EXIT_SUCCESS);
+            default: /* '?' */
+                Usage();
+                std::exit(EXIT_FAILURE);
+        }
+    }
+
+    if (optind >= argc) {
+        Usage();
+        std::exit(EXIT_FAILURE);
+    }
+
+    // Store files to switcher
+    for (int i = optind; i < argc; ++i) {
+        std::string filename = argv[i];
+        switcher.Insert(filename);
+    }
+
+    // Main processing.
+    Loop();
+
+    // Post processing.
     switcher.Stop();
 
     return 0;
