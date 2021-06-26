@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
             int num = std::stoi(tokens[1]);
             // Just for debug
             std::cout << "command = 'start' , val = " << num << std::endl;
-            switcher.Start();
+            switcher.Start(num);
         } else if (tokens[0] == "stop") {
             std::cout << "command = 'stop'" << std::endl;
             switcher.Stop();

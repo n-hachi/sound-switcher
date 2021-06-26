@@ -10,7 +10,7 @@
 
 class SoundSwitcher {
    public:
-    void Start();
+    void Start(const int num);
     void Stop();
     void Insert(const std::string &path);
     size_t Size() const;

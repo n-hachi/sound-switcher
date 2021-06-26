@@ -36,7 +36,7 @@ void SoundSwitcher::ThreadFunc() {
     waitpid(pid_, NULL, 0);
 }
 
-void SoundSwitcher::Start() {
+void SoundSwitcher::Start(const int num) {
     // If child process has already executed, stop it at first.
     Stop();
 
@@ -55,7 +55,7 @@ void SoundSwitcher::Start() {
 
         const char **argv = new const char *[3];
         argv[0] = "/usr/bin/aplay";
-        argv[1] = map_.at(0).c_str();
+        argv[1] = map_.at(num).c_str();
         argv[2] = NULL;
 
         const char *cmd = argv[0];
