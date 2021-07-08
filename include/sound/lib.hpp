@@ -15,6 +15,7 @@ class SoundSwitcher {
     void Stop();
     void Insert(const std::string &path);
     void set_options(const std::vector<std::string> &options);
+    std::vector<std::string> options() const;
     size_t Size() const;
     std::map<int, std::string> map();
 

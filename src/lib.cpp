@@ -41,6 +41,8 @@ void SoundSwitcher::set_options(const std::vector<std::string> &options) {
     std::copy(options.begin(), options.end(), options_.begin());
 }
 
+std::vector<std::string> SoundSwitcher::options() const { return options_; }
+
 void SoundSwitcher::Start(const int num) {
     // If child process has already executed, stop it at first.
     Stop();
