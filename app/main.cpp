@@ -78,6 +78,30 @@ void Loop(void) {
             for (auto it = m.begin(); it != m.end(); ++it) {
                 std::cout << it->first << " : " << it->second << std::endl;
             }
+        } else if (tokens[0] == "options") {
+            std::vector<std::string> options;
+
+            // If no arguments,
+            if (tokens.size() == 1) {
+                options = switcher.options();
+                std::cout << "options = [";
+                for (auto it = options.begin(); it != options.end(); ++it) {
+                    std::cout << " " << *it << " ";
+
+                    // print separator if it does not indicate options
+                    if (std::next(it) != options.end()) {
+                        std::cout << ",";
+                    }
+                }
+                std::cout << "]" << std::endl;
+                continue;
+            }
+
+            // If there is one or more arguments
+            for (auto it = tokens.begin() + 1; it != tokens.end(); ++it) {
+                options.push_back(*it);
+            }
+            switcher.set_options(options);
         } else {
             std::cout << "input 'start <number>' , 'list' , 'stop' or 'quit'"
                       << std::endl;
