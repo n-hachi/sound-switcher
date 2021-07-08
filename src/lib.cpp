@@ -62,6 +62,11 @@ void SoundSwitcher::Start(const int num) {
         command_vec.push_back(const_cast<char *>("/usr/bin/aplay"));
         command_vec.push_back(const_cast<char *>(map_.at(num).c_str()));
 
+        // Append optional arguments
+        for (auto it = options_.begin(); it != options_.end(); ++it) {
+            command_vec.push_back(const_cast<char *>(it->c_str()));
+        }
+
         // finally append null
         command_vec.push_back(NULL);
 
