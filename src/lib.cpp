@@ -36,6 +36,11 @@ void SoundSwitcher::ThreadFunc() {
     waitpid(pid_, NULL, 0);
 }
 
+void SoundSwitcher::set_options(const std::vector<std::string> &options) {
+    options_.resize(options.size());
+    std::copy(options.begin(), options.end(), options_.begin());
+}
+
 void SoundSwitcher::Start(const int num) {
     // If child process has already executed, stop it at first.
     Stop();
