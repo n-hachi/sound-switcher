@@ -58,13 +58,16 @@ void SoundSwitcher::Start(const int num) {
         dup2(fd, 1);
         dup2(fd, 2);
 
-        const char **argv = new const char *[3];
-        argv[0] = "/usr/bin/aplay";
-        argv[1] = map_.at(num).c_str();
-        argv[2] = NULL;
+        std::vector<char *> command_vec;
+        command_vec.push_back(const_cast<char *>("/usr/bin/aplay"));
+        command_vec.push_back(const_cast<char *>(map_.at(num).c_str()));
 
-        const char *cmd = argv[0];
-        execvp(cmd, (char **)argv);
+        // finally append null
+        command_vec.push_back(NULL);
+
+        // call execvp function
+        char **command = command_vec.data();
+        execvp(command[0], &command[0]);
     }
     if (pid_ > 0) {
         // Wait for child process exit.
