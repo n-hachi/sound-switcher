@@ -86,7 +86,12 @@ void Loop(void) {
                 options = switcher.options();
                 std::cout << "options = [";
                 for (auto it = options.begin(); it != options.end(); ++it) {
-                    std::cout << *it;
+                    std::cout << " " << *it << " ";
+
+                    // print separator if it does not indicate options
+                    if (std::next(it) != options.end()) {
+                        std::cout << ",";
+                    }
                 }
                 std::cout << "]" << std::endl;
                 continue;
